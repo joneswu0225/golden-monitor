@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.goldenmonitor.repository.PositionMapper" >
+    <insert id="insert" parameterType="Position" useGeneratedKeys="true" keyProperty="id">
+        insert into position(`title`,`ath`, `atv`, `type`, `is_huafa`)
+        values(#{title}, #{ath}, #{atv}, #{type}, #{isHuafa})
+    </insert>
+    <insert id="update" parameterType="Position">
+        update position set title = #{title},ath=#{ath},atv = #{atv},type = #{type},is_huafa = #{isHuafa}  where id=#{id}
+    </insert>
+    <select id="findList" resultType="Position" parameterType="Query">
+        <include refid="com.jones.goldenmonitor.repository.BaseMapper.startPage" />
+        select * from position
+        where 1=1
+        <if test="type != null and type != ''">
+            and `type`= #{type}
+        </if>
+        <if test="title != null and title != ''">
+            and `title` like '%'||#{title}||'%'
+        </if>
+        <if test="isHuafa != null">
+            and `is_huafa`=#{isHuafa}
+        </if>
+        order by id desc
+        <include refid="com.jones.goldenmonitor.repository.BaseMapper.endPage" />
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from position
+        where 1=1
+        <if test="type != null and type != ''">
+            and `type`= #{type}
+        </if>
+        <if test="title != null and title != ''">
+            and `title` like '%'||#{title}||'%'
+        </if>
+        <if test="isHuafa != null">
+            and `is_huafa`=#{isHuafa}
+        </if>
+    </select>
+    <select id="findAll" resultType="Position">
+        select * from position order by id desc
+    </select>
+    <select id="findOne" resultType="Position">
+        select * from position where id=#{id}
+    </select>
+    <delete id="delete">
+        DELETE from position where id=#{id}
+    </delete>
+</mapper>

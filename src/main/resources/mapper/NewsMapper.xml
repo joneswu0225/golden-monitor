@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.goldenmonitor.repository.NewsMapper" >
+    <insert id="insert" parameterType="News" useGeneratedKeys="true" keyProperty="id">
+        insert into news(`title`,`type`, `content`, `is_huafa`, `publish_time`)
+        values(#{title}, #{type}, #{content}, #{isHuafa}, #{publishTime})
+    </insert>
+    <insert id="update" parameterType="News">
+        update news set title = #{title},content=#{content},type = #{type}, is_huafa=#{isHuafa},publish_time = #{publishTime}  where id=#{id}
+    </insert>
+    <select id="findList" resultType="News" parameterType="Query">
+        <include refid="com.jones.goldenmonitor.repository.BaseMapper.startPage" />
+        select * from news
+        where 1=1
+        <if test="type != null and type != ''">
+            and `type`= #{type}
+        </if>
+        <if test="title != null and title != ''">
+            and `title` like '%'||#{title}||'%'
+        </if>
+        <if test="isHuafa != null">
+            and `is_huafa`=#{isHuafa}
+        </if>
+        <if test="startDate != null">
+            and datetime(publish_time)&gt;=datetime(#{startDate})
+        </if>
+        <if test="endDate != null">
+            and datetime(publish_time)&lt;=datetime(#{endDate})
+        </if>
+        order by id desc
+        <include refid="com.jones.goldenmonitor.repository.BaseMapper.endPage" />
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from news
+        where 1=1
+        <if test="type != null and type != ''">
+            and `type`= #{type}
+        </if>
+        <if test="title != null and title != ''">
+            and `title` like '%'||#{title}||'%'
+        </if>
+        <if test="isHuafa != null">
+            and `is_huafa`=#{isHuafa}
+        </if>
+        <if test="startDate != null">
+            and datetime(publish_time)&gt;=datetime(#{startDate})
+        </if>
+        <if test="endDate != null">
+            and datetime(publish_time)&lt;=datetime(#{endDate})
+        </if>
+    </select>
+    <select id="findAll" resultType="News">
+        select * from news order by id desc
+    </select>
+    <select id="findOne" resultType="News">
+        select * from news where id=#{id}
+    </select>
+    <delete id="delete">
+        DELETE from news where id=#{id}
+    </delete>
+</mapper>

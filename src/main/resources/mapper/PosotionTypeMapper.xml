@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.goldenmonitor.repository.PositionTypeMapper" >
+    <insert id="insert" parameterType="PositionType" useGeneratedKeys="true" keyProperty="id">
+        insert into position_type(`title`,`icon`, `detail`)
+        values(#{title}, #{icon}, #{detail})
+    </insert>
+    <insert id="update" parameterType="PositionType">
+        update position_type set title = #{title},icon=#{icon},detail = #{detail}  where id=#{id}
+    </insert>
+    <select id="findList" resultType="PositionType" parameterType="Query">
+        <include refid="com.jones.goldenmonitor.repository.BaseMapper.startPage" />
+        select * from position_type
+        order by id desc
+        <include refid="com.jones.goldenmonitor.repository.BaseMapper.endPage" />
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from position_type
+        where 1=1
+    </select>
+    <select id="findAll" resultType="PositionType">
+        select * from position_type order by id desc
+    </select>
+    <select id="findOne" resultType="PositionType">
+        select * from position_type where id=#{id}
+    </select>
+    <delete id="delete">
+        DELETE from position_type where id=#{id}
+    </delete>
+</mapper>

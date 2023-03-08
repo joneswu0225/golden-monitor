@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jones.goldenmonitor.repository.IntentMapper" >
+    <insert id="insert" parameterType="Intent" useGeneratedKeys="true" keyProperty="id">
+        insert into intent(`title`,`type`, `content`, `is_huafa`)
+        values(#{title}, #{type}, #{content}, #{isHuafa})
+    </insert>
+    <insert id="update" parameterType="Intent">
+        update intent set title = #{title},type = #{type},content = #{content}, is_huafa=#{isHuafa}  where id=#{id}
+    </insert>
+    <select id="findList" resultType="Intent" parameterType="Query">
+        <include refid="com.jones.goldenmonitor.repository.BaseMapper.startPage" />
+        select * from intent
+        where 1=1
+        <if test="type != null and type != ''">
+            and `type`= #{type}
+        </if>
+        <if test="title != null and title != ''">
+            and `title` like '%'||#{title}||'%'
+        </if>
+        <if test="isHuafa != null">
+            and `is_huafa`=#{isHuafa}
+        </if>
+        order by id desc
+        <include refid="com.jones.goldenmonitor.repository.BaseMapper.endPage" />
+    </select>
+    <select id="findCount" resultType="java.lang.Integer" parameterType="Query">
+        select count(*) from intent
+        where 1=1
+        <if test="type != null and type != ''">
+            and `type`= #{type}
+        </if>
+        <if test="title != null and title != ''">
+            and `title` like '%'||#{title}||'%'
+        </if>
+        <if test="isHuafa != null">
+            and `is_huafa`=#{isHuafa}
+        </if>
+    </select>
+    <select id="findAll" resultType="Intent">
+        select * from intent order by id desc
+    </select>
+    <select id="findOne" resultType="Intent">
+        select * from intent where id=#{id}
+    </select>
+    <delete id="delete">
+        DELETE from intent where id=#{id}
+    </delete>
+</mapper>
